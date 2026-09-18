@@ -1,13 +1,15 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const Database = require('better-sqlite3');
+const { DatabaseSync } = require('node:sqlite');
 const crypto = require('crypto');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8100;
+const IP = process.env.IP || '::';
 
-const db = new Database('database.sqlite');
+// Base de datos SQLite nativa (sin dependencias C++)
+const db = new DatabaseSync('database.sqlite');
 
 // Inicializar tablas
 db.exec(`
@@ -24,7 +26,7 @@ db.exec(`
     alias TEXT,
     passes INTEGER NOT NULL DEFAULT 1,
     phone TEXT,
-    status TEXT DEFAULT 'pendiente', -- 'pendiente', 'confirmado', 'rechazado'
+    status TEXT DEFAULT 'pendiente',
     confirmed_passes INTEGER DEFAULT 0,
     guest_phone TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -118,7 +120,7 @@ app.post('/api/guests', (req, res) => {
     res.json({
       success: true,
       guest: {
-        id: result.lastInsertRowid,
+        id: Number(result.lastInsertRowid),
         code,
         first_name,
         last_name,
@@ -131,7 +133,7 @@ app.post('/api/guests', (req, res) => {
   }
 });
 
-// EDITAR INVITADO (Actualiza datos y recalcula pases confirmados si se reducen los asignados)
+// Editar invitado
 app.put('/api/guests/:id', (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, alias, passes, phone } = req.body;
@@ -143,7 +145,6 @@ app.put('/api/guests/:id', (req, res) => {
   const passCount = parseInt(passes, 10) || 1;
 
   try {
-    // Si ya estaba confirmado, sus pases ocupados no pueden superar el nuevo límite
     db.prepare(`
       UPDATE guests 
       SET first_name = ?, 
@@ -165,7 +166,7 @@ app.put('/api/guests/:id', (req, res) => {
   }
 });
 
-// ELIMINAR INVITADO (Libera inmediatamente los pases ocupados y asignados)
+// Eliminar invitado
 app.delete('/api/guests/:id', (req, res) => {
   const { id } = req.params;
   try {
@@ -214,7 +215,6 @@ app.post('/api/invitation/:code/rsvp', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor activo en http://localhost:${PORT}`);
-  console.log(`Panel de Administración: http://localhost:${PORT}/admin.html`);
+app.listen(PORT, IP, () => {
+  console.log(`Servidor activo en el puerto ${PORT}`);
 });

@@ -1,13 +1,12 @@
 {
   "name": "invitacion-graduacion-silvia",
   "version": "1.0.0",
-  "description": "Sistema de Invitaciones Formales con RSVP y SQLite",
+  "description": "Sistema de Invitaciones Formales con RSVP y SQLite Nativo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.8.1",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   }
