@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+
+# Base de datos SQLite (se genera en el despliegue/servidor)
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+database.sqlite
+
+# Archivos del sistema y entorno
+.env
+.DS_Store
+Thumbs.db

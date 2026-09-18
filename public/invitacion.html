@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduación Licda. Silvia Waleska González Ojeda</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FFF9E6',
+                            300: '#F3E5AB',
+                            400: '#E6CA65',
+                            500: '#D4AF37',
+                            600: '#AA820A',
+                            700: '#856404'
+                        },
+                        crimson: {
+                            500: '#A61C1C',
+                            600: '#8B0000',
+                            700: '#680000',
+                            900: '#3D0000'
+                        },
+                        darkness: {
+                            800: '#141418',
+                            900: '#0B0B0E',
+                            950: '#050507'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0B0E;
+            color: #E2E8F0;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF099 0%, #D4AF37 50%, #997A15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-card {
+            background: linear-gradient(145deg, rgba(20, 20, 24, 0.95), rgba(10, 10, 14, 0.98));
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .sparkle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212,175,55,0.7) 0%, rgba(212,175,55,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0.2; }
+            100% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        .red-ribbon {
+            background: linear-gradient(90deg, #680000 0%, #A61C1C 50%, #680000 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-200 selection:bg-gold-500 selection:text-black">
+
+    <div class="fixed inset-0 pointer-events-none z-0 opacity-40">
+        <div class="sparkle w-72 h-72 top-[-50px] left-[-50px]"></div>
+        <div class="sparkle w-96 h-96 bottom-[-100px] right-[-100px]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-crimson-900/20 via-darkness-950/80 to-darkness-950"></div>
+    </div>
+
+    <main class="relative z-10 max-w-4xl mx-auto px-4 py-8 sm:py-14 flex flex-col items-center">
+
+        <!-- SOBRE VIRTUAL -->
+        <div id="envelopeScreen" class="w-full max-w-lg mb-8 transition-all duration-700">
+            <div class="gold-card rounded-2xl p-6 sm:p-8 text-center border-2 border-gold-500/50 shadow-2xl relative overflow-hidden group hover:border-gold-400 transition-all">
+                <div class="absolute -top-12 -right-12 w-24 h-24 bg-gold-500/10 rounded-full blur-xl"></div>
+                
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-darkness-900 border border-gold-500/60 flex items-center justify-center shadow-inner relative">
+                    <i class="fa-solid fa-scale-balanced text-3xl gold-gradient-text"></i>
+                </div>
+
+                <p class="text-xs font-cinzel text-gold-400 uppercase tracking-widest mb-1">Solemne Invitación de Graduación</p>
+                <h1 class="text-2xl sm:text-3xl font-cinzel font-bold text-white mb-2 tracking-wide">
+                    Licda. Silvia Waleska<br>González Ojeda
+                </h1>
+                <p class="text-xs text-slate-400 font-sans tracking-wide uppercase mb-6">Abogada y Notaria</p>
+
+                <div class="bg-darkness-800/90 rounded-lg p-3.5 border border-gold-500/30 mb-6 inline-block w-full max-w-xs shadow-inner">
+                    <span class="block text-[11px] text-slate-400 uppercase tracking-wider">Invitación Especial Para:</span>
+                    <span id="envelopeGuestName" class="text-base sm:text-lg font-semibold text-gold-300 font-playfair italic">Cargando invitado...</span>
+                    <div class="mt-1 text-xs text-crimson-500 font-bold flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span id="envelopePassesText">Pases reservados: -- personas</span>
+                    </div>
+                </div>
+
+                <button onclick="openInvitationCard()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-darkness-950 font-bold font-cinzel tracking-wider text-sm shadow-xl hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-envelope-open text-base"></i> ABRIR INVITACIÓN FORMAL
+                </button>
+            </div>
+        </div>
+
+        <!-- TARJETA FORMAL -->
+        <article id="invitationContent" class="w-full max-w-2xl hidden transition-all duration-1000 opacity-0 transform translate-y-6">
+            
+            <div class="gold-card rounded-3xl p-6 sm:p-10 border border-gold-500/40 shadow-2xl relative overflow-hidden">
+                
+                <div class="absolute top-0 left-0 right-0 h-2 red-ribbon"></div>
+                
+                <div class="absolute top-3 left-3 text-gold-500/30 opacity-70">
+                    <i class="fa-solid fa-crown text-xl"></i>
+                </div>
+                <div class="absolute top-3 right-3 text-gold-500/30 opacity-70">
+                    <i class="fa-solid fa-crown text-xl"></i>
+                </div>
+
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center p-2 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 mb-4 px-4">
+                        <i class="fa-solid fa-gavel mr-2 text-sm text-crimson-500"></i>
+                        <span class="text-xs font-cinzel font-semibold tracking-widest uppercase">Ciencias Jurídicas y Sociales</span>
+                    </div>
+
+                    <p class="italic font-playfair text-slate-300 text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-6">
+                        "El esfuerzo, la constancia y la vocación de justicia hoy se convierten en el comienzo de un nuevo camino profesional."
+                    </p>
+
+                    <h2 class="text-xs uppercase tracking-widest font-cinzel text-gold-400 mb-2">Tengo el honor y la alegría de invitarle a la</h2>
+                    <h1 class="text-2xl sm:text-4xl font-cinzel font-black tracking-wide text-white mb-2">
+                        FIESTA DE GRADUACIÓN
+                    </h1>
+                    <div class="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto my-3"></div>
+                    <p class="text-xs font-cinzel text-slate-300 uppercase tracking-widest">DE LA LICENCIADA</p>
+                    <h3 class="text-2xl sm:text-3xl font-playfair font-bold gold-gradient-text my-1">
+                        Silvia Waleska González Ojeda
+                    </h3>
+                    <p class="text-xs text-slate-400 font-sans tracking-widest uppercase">Abogada y Notaria</p>
+                </div>
+
+                <div class="bg-darkness-900/70 rounded-2xl p-5 border border-gold-500/20 mb-8 text-center">
+                    <p class="text-sm text-slate-200 font-sans leading-relaxed">
+                        Con profunda gratitud hacia Dios, mi familia y mis seres queridos por su apoyo incondicional a lo largo de este camino, tengo el honor y la alegría de invitarte a celebrar conmigo este logro tan importante.
+                    </p>
+                </div>
+
+                <!-- DETALLES DEL EVENTO -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-darkness-900/80 p-4 rounded-xl border border-gold-500/20 flex items-start space-x-3">
+                        <div class="p-3 bg-gold-500/10 rounded-lg border border-gold-500/30 text-gold-400">
+                            <i class="fa-regular fa-calendar-check text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-cinzel text-gold-400 uppercase tracking-wider">Fecha y Hora</h4>
+                            <p class="text-sm font-bold text-white mt-0.5">Viernes, 25 de Septiembre</p>
+                            <p class="text-xs text-slate-300">19:00 PM (7:00 PM)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-darkness-900/80 p-4 rounded-xl border border-gold-500/20 flex items-start space-x-3">
+                        <div class="p-3 bg-crimson-600/20 rounded-lg border border-crimson-500/40 text-crimson-500">
+                            <i class="fa-solid fa-location-dot text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-cinzel text-gold-400 uppercase tracking-wider">Lugar del Evento</h4>
+                            <p class="text-sm font-bold text-white mt-0.5">Hotel Barceló Guatemala City</p>
+                            <p class="text-xs text-slate-300">Salón El Dorado, Segundo Nivel</p>
+                            <p class="text-[11px] text-slate-400 mt-1">7a. Avenida 15-45, Zona 9, Ciudad de Guatemala</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-darkness-900/80 p-4 rounded-xl border border-gold-500/20 flex items-start space-x-3">
+                        <div class="p-3 bg-gold-500/10 rounded-lg border border-gold-500/30 text-gold-400">
+                            <i class="fa-solid fa-user-tie text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-cinzel text-gold-400 uppercase tracking-wider">Código de Vestimenta</h4>
+                            <p class="text-sm font-bold text-white mt-0.5">Elegante Formal</p>
+                            <p class="text-xs text-slate-300">Traje formal / Vestido de noche</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-darkness-900/80 p-4 rounded-xl border border-gold-500/20 flex items-start space-x-3">
+                        <div class="p-3 bg-gold-500/10 rounded-lg border border-gold-500/30 text-gold-400">
+                            <i class="fa-solid fa-users text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-cinzel text-gold-400 uppercase tracking-wider">Pases Reservados</h4>
+                            <p id="passesDisplay" class="text-sm font-bold text-gold-300 mt-0.5">-- Personas</p>
+                            <p class="text-[11px] text-slate-400">Pase personal e intransferible</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 mb-8">
+                    <a href="https://maps.google.com/?cid=7467037180949608069" target="_blank" class="flex-1 py-2.5 px-4 rounded-xl bg-darkness-800 border border-gold-500/40 hover:bg-gold-500/10 text-gold-300 font-semibold text-xs text-center transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps
+                    </a>
+                    <button onclick="addToCalendar()" class="flex-1 py-2.5 px-4 rounded-xl bg-darkness-800 border border-gold-500/40 hover:bg-gold-500/10 text-gold-300 font-semibold text-xs text-center transition flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-calendar-plus"></i> Añadir a mi Calendario
+                    </button>
+                </div>
+
+                <div class="bg-gradient-to-r from-darkness-900 via-crimson-900/20 to-darkness-900 p-5 rounded-2xl border border-gold-500/30 text-center mb-8 relative">
+                    <div class="w-10 h-10 mx-auto -mt-8 bg-darkness-900 border border-gold-500/50 rounded-full flex items-center justify-center text-gold-400 shadow">
+                        <i class="fa-solid fa-envelope-open-text text-sm"></i>
+                    </div>
+                    <h4 class="text-xs font-cinzel font-bold text-gold-300 uppercase tracking-widest mt-2 mb-1">Muestra de Afecto</h4>
+                    <p class="text-xs text-slate-300 italic font-playfair max-w-md mx-auto leading-relaxed">
+                        Su presencia es mi mayor y más apreciado regalo. Si desea tener un detalle adicional conmigo, contaremos con buzón para <strong class="text-gold-300 font-sans not-italic">Lluvia de Sobres</strong> durante la recepción.
+                    </p>
+                </div>
+
+                <!-- SECCIÓN RSVP -->
+                <div id="rsvpContainer" class="border-t border-gold-500/30 pt-8">
+                    <div class="text-center mb-6">
+                        <span class="text-xs font-cinzel text-crimson-500 font-bold uppercase tracking-widest">Confirmación de Asistencia</span>
+                        <h3 class="text-xl font-cinzel font-bold text-white mt-1">¿NOS ACOMPAÑARÁS?</h3>
+                        <p class="text-xs text-slate-400 mt-1">Por favor, indícanos tu confirmación antes del 20 de septiembre.</p>
+                    </div>
+
+                    <form id="rsvpForm" onsubmit="handleRSVPSubmit(event)" class="space-y-4 max-w-md mx-auto bg-darkness-900/90 p-5 sm:p-6 rounded-2xl border border-gold-500/20">
+                        <div>
+                            <label class="block text-xs font-semibold text-gold-300 mb-1">Nombre del Invitado</label>
+                            <input type="text" id="rsvpName" readonly class="w-full bg-darkness-800/60 border border-gold-500/20 rounded-lg px-3 py-2.5 text-sm text-slate-300 cursor-not-allowed">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gold-300 mb-1">Teléfono / WhatsApp * (8 dígitos)</label>
+                            <input type="tel" 
+                                   id="rsvpPhone" 
+                                   required 
+                                   inputmode="numeric"
+                                   pattern="[0-9]{8}"
+                                   maxlength="8"
+                                   minlength="8"
+                                   placeholder="Ej. 55551234 (solo 8 dígitos)" 
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)"
+                                   class="w-full bg-darkness-800 border border-gold-500/30 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-gold-400 transition font-mono tracking-wider">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Ingresa únicamente los 8 dígitos de tu teléfono.</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gold-300 mb-1">¿Confirmas Asistencia? *</label>
+                            <select id="rsvpStatus" onchange="toggleAttendingInput()" class="w-full bg-darkness-800 border border-gold-500/30 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-gold-400 transition">
+                                <option value="si">¡Sí, asistiré con mucho gusto!</option>
+                                <option value="no">Lamentablemente no podré asistir</option>
+                            </select>
+                        </div>
+
+                        <div id="attendingCountWrapper">
+                            <label class="block text-xs font-semibold text-gold-300 mb-1">Pases que Utilizarás</label>
+                            <select id="rsvpAttendingCount" class="w-full bg-darkness-800 border border-gold-500/30 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-gold-400 transition">
+                            </select>
+                        </div>
+
+                        <button type="submit" id="btnSubmitRSVP" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-crimson-700 via-crimson-600 to-crimson-700 hover:brightness-110 text-white font-bold font-cinzel tracking-wider text-xs shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> ENVIAR CONFIRMACIÓN
+                        </button>
+                    </form>
+
+                    <div id="rsvpSuccessMessage" class="hidden text-center p-6 bg-darkness-900 border border-gold-500/40 rounded-2xl max-w-md mx-auto">
+                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-emerald-500/40 text-xl">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h4 id="successTitle" class="text-lg font-cinzel font-bold text-gold-300">¡Confirmación Guardada!</h4>
+                        <p id="successDesc" class="text-xs text-slate-300 mt-1 mb-4">Tu respuesta se ha registrado con éxito en el sistema.</p>
+                        
+                        <button onclick="sendRSVPViaWhatsApp()" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fa-brands fa-whatsapp text-base"></i> Notificar a Silvia por WhatsApp
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center border-t border-slate-800 pt-6">
+                    <p class="text-[11px] text-slate-500 uppercase tracking-widest font-cinzel">
+                        Graduación Licda. Silvia Waleska González Ojeda &bull; 2026
+                    </p>
+                </div>
+
+            </div>
+        </article>
+    </main>
+
+    <script>
+        let currentGuest = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const guestCode = urlParams.get('id') || urlParams.get('code');
+        const fallbackName = urlParams.get('nombre');
+        const fallbackPasses = parseInt(urlParams.get('pases'), 10) || 1;
+
+        window.onload = async function() {
+            if (guestCode) {
+                try {
+                    const res = await fetch(`/api/invitation/${guestCode}`);
+                    if (res.ok) {
+                        currentGuest = await res.json();
+                        setupGuestUI();
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Error al obtener invitado:", e);
+                }
+            }
+
+            currentGuest = {
+                code: guestCode || 'default',
+                first_name: fallbackName || 'Apreciable',
+                last_name: fallbackName ? '' : 'Invitado(a)',
+                passes: fallbackPasses,
+                status: 'pendiente',
+                confirmed_passes: 0
+            };
+            setupGuestUI();
+        };
+
+        function setupGuestUI() {
+            const officialFullName = `${currentGuest.first_name} ${currentGuest.last_name}`.trim();
+            document.getElementById('envelopeGuestName').textContent = officialFullName;
+            
+            const passLabel = currentGuest.passes === 1 ? '1 persona' : `${currentGuest.passes} personas`;
+            document.getElementById('envelopePassesText').textContent = `Pases reservados: ${passLabel}`;
+            document.getElementById('passesDisplay').textContent = passLabel;
+            document.getElementById('rsvpName').value = officialFullName;
+
+            const countSelect = document.getElementById('rsvpAttendingCount');
+            countSelect.innerHTML = '';
+            for (let i = 1; i <= currentGuest.passes; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `${i} ${i === 1 ? 'pase' : 'pases'}`;
+                if (i === currentGuest.passes) opt.selected = true;
+                countSelect.appendChild(opt);
+            }
+
+            if (currentGuest.status && currentGuest.status !== 'pendiente') {
+                showAlreadyResponded();
+            }
+        }
+
+        function toggleAttendingInput() {
+            const status = document.getElementById('rsvpStatus').value;
+            const countWrap = document.getElementById('attendingCountWrapper');
+            if (status === 'no') {
+                countWrap.classList.add('hidden');
+            } else {
+                countWrap.classList.remove('hidden');
+            }
+        }
+
+        function openInvitationCard() {
+            const envelope = document.getElementById('envelopeScreen');
+            const content = document.getElementById('invitationContent');
+
+            envelope.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                envelope.classList.add('hidden');
+                content.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('opacity-0', 'translate-y-6');
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#D4AF37', '#8B0000', '#F3E5AB']
+                    });
+                }, 50);
+            }, 400);
+        }
+
+        async function handleRSVPSubmit(e) {
+            e.preventDefault();
+            const phone = document.getElementById('rsvpPhone').value.trim();
+            const status = document.getElementById('rsvpStatus').value;
+            const count = document.getElementById('rsvpAttendingCount').value;
+            const btn = document.getElementById('btnSubmitRSVP');
+
+            if (!/^[0-9]{8}$/.test(phone)) {
+                alert("Por favor ingresa un número de teléfono de exactamente 8 dígitos (Ej. 55551234).");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+
+            if (currentGuest.code && currentGuest.code !== 'default') {
+                try {
+                    const res = await fetch(`/api/invitation/${currentGuest.code}/rsvp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            status,
+                            attending_count: count,
+                            guest_phone: phone
+                        })
+                    });
+                    if (res.ok) {
+                        currentGuest.status = status === 'si' ? 'confirmado' : 'rechazado';
+                        currentGuest.confirmed_passes = status === 'si' ? parseInt(count) : 0;
+                        currentGuest.guest_phone = phone;
+                    }
+                } catch (err) {
+                    console.error("Error al enviar confirmación:", err);
+                }
+            }
+
+            document.getElementById('rsvpForm').classList.add('hidden');
+            const successBox = document.getElementById('rsvpSuccessMessage');
+            successBox.classList.remove('hidden');
+
+            if (status === 'si') {
+                document.getElementById('successTitle').textContent = "¡Asistencia Confirmada!";
+                document.getElementById('successDesc').textContent = `Muchas gracias por confirmar. Silvia te espera con alegría (Pases confirmados: ${count}).`;
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.5 },
+                    colors: ['#D4AF37', '#22c55e']
+                });
+            } else {
+                document.getElementById('successTitle').textContent = "Respuesta Guardada";
+                document.getElementById('successDesc').textContent = "Lamentamos que no puedas acompañarnos. Muchas gracias por notificarnos.";
+            }
+        }
+
+        function showAlreadyResponded() {
+            document.getElementById('rsvpForm').classList.add('hidden');
+            const successBox = document.getElementById('rsvpSuccessMessage');
+            successBox.classList.remove('hidden');
+            if (currentGuest.status === 'confirmado') {
+                document.getElementById('successTitle').textContent = "¡Asistencia ya Confirmada!";
+                document.getElementById('successDesc').textContent = `Tienes ${currentGuest.confirmed_passes} pase(s) confirmado(s). ¡Te esperamos!`;
+            } else {
+                document.getElementById('successTitle').textContent = "Invitación Respondida";
+                document.getElementById('successDesc').textContent = "Registraste que no podrás asistir. ¡Gracias por avisar!";
+            }
+        }
+
+        function sendRSVPViaWhatsApp() {
+            const name = document.getElementById('rsvpName').value;
+            const status = document.getElementById('rsvpStatus').value === 'si' ? '¡Sí asistiré!' : 'No podré asistir';
+            const count = document.getElementById('rsvpAttendingCount').value;
+
+            let text = `¡Hola Silvia! 👋✨\n\n`;
+            text += `Te escribo para confirmar mi asistencia a tu fiesta de graduación:\n\n`;
+            text += `👤 *Invitado:* ${name}\n`;
+            text += `✅ *Estado:* ${status}\n`;
+            if (document.getElementById('rsvpStatus').value === 'si') {
+                text += `🎟️ *Pases a utilizar:* ${count}\n`;
+            }
+            text += `\n¡Muchas felicidades Licenciada! 🎓⚖️`;
+
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function addToCalendar() {
+            const title = encodeURIComponent("Graduación Licda. Silvia Waleska González Ojeda");
+            const details = encodeURIComponent("Celebración de Graduación de Abogada y Notaria. Vestimenta: Elegante Formal.");
+            const location = encodeURIComponent("Hotel Barceló Guatemala City, Salón El Dorado, 2do Nivel, 7a Avenida 15-45, Zona 9, Guatemala");
+            const startDate = "20260925T190000";
+            const endDate = "20260925T235900";
+
+            window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`, '_blank');
+        }
+    </script>
+</body>
+</html>
